@@ -21,13 +21,16 @@ public class MainActivity extends AppCompatActivity {
     private List<MenuItem> list;
     private OptionMenuBar optionMenuBar;
     private MenuBarView menuBarView;
+    private ViewPager viewPager;
+
+    private boolean b;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ViewPager viewPager = findViewById(R.id.vp);
+        viewPager = findViewById(R.id.vp);
 
         final MenuBarView.OnAdapterListener listener = new MenuBarView.OnAdapterListener() {
             @Override
@@ -44,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         list = new ArrayList<>();
 
         for (int i = 0; i < 15; i++) {
-            list.add(new MenuItem(i+"++++"+i));
+            list.add(new MenuItem(i + "++++" + i));
         }
 
         optionMenuBar = new OptionMenuBar(this, viewPager, list) {
@@ -65,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                list.add(new MenuItem("我是新的"+list.size()));
+                list.add(new MenuItem("我是新的" + list.size()));
                 optionMenuBar.updataView(list);
                 menuBarView.updataView(list);
             }
@@ -85,10 +88,24 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 list.clear();
                 for (int i = 0; i < 15; i++) {
-                    list.add(new MenuItem(i+"++++"+i));
+                    list.add(new MenuItem(i + "++++" + i));
                 }
                 optionMenuBar.updataView(list);
                 menuBarView.updataView(list);
+            }
+        });
+        findViewById(R.id.button4).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (b) {
+                    b = false;
+                    viewPager.setVisibility(View.VISIBLE);
+                    menuBarView.setVisibility(View.GONE);
+                } else {
+                    b = true;
+                    viewPager.setVisibility(View.GONE);
+                    menuBarView.setVisibility(View.VISIBLE);
+                }
             }
         });
     }
