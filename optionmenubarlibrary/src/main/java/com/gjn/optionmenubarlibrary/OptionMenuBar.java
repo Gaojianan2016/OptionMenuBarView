@@ -18,52 +18,84 @@ import java.util.List;
  * @time 2018/7/19 15:59
  */
 
-public class OptionMenuBar {
+public abstract class OptionMenuBar {
     private static final String TAG = "OptionMenuBar";
 
     private Context context;
     private ViewPager viewPager;
-    private List<? extends MenuItem> datas;
+    private List<MenuItem> datas;
     private int row = 2;
     private int col = 4;
     private int pageSize;
     private int page;
     private int widthCol;
-    private int heightCol;
-    private OptionMenuBarAdapter adapter;
+    private int heightRow;
 
-    public OptionMenuBar(Context context, ViewPager viewPager, List<? extends MenuItem> datas) {
+    public OptionMenuBar(Context context, ViewPager viewPager, List<MenuItem> datas) {
         this.context = context;
         this.viewPager = viewPager;
         this.datas = datas == null ? new ArrayList<MenuItem>(): datas;
-        init();
     }
 
-    public OptionMenuBar(Context context, ViewPager viewPager, List<? extends MenuItem> datas, int row, int col) {
-        this.context = context;
-        this.viewPager = viewPager;
-        this.datas = datas == null ? new ArrayList<MenuItem>(): datas;
+    public OptionMenuBar(Context context, ViewPager viewPager, List<MenuItem> datas, int row, int col) {
+        this(context, viewPager, datas);
         this.row = row;
         this.col = col;
-        init();
     }
 
-    public void setDatas(List<? extends MenuItem> datas){
+    public void setRow(int row) {
+        if (row <= 0) {
+            row = 1;
+        }
+        this.row = row;
+    }
+
+    public void setCol(int col) {
+        if (col <= 0) {
+            col = 1;
+        }
+        this.col = col;
+    }
+
+    public void setDatas(List<MenuItem> datas){
         this.datas = datas == null ? new ArrayList<MenuItem>(): datas;
     }
 
-    public void setAdapter(OptionMenuBarAdapter adapter){
-        this.adapter = adapter;
+    public int getWidthCol() {
+        return widthCol;
+    }
+
+    public int getHeightRow() {
+        return heightRow;
+    }
+
+    public int getViewPagerHeight(){
+        return heightRow * 2;
+    }
+
+    public void setViewPager(ViewPager viewPager) {
+        this.viewPager = viewPager;
         updataView();
     }
 
     public void updataView(){
+        updataView(datas);
+    }
+
+    public void updataView(List<MenuItem> datas){
+        updataView(row, col, datas);
+    }
+
+    public void updataView(int row, int col, List<MenuItem> datas){
+        setCol(col);
+        setRow(row);
+        setDatas(datas);
         create();
     }
 
     private void init() {
         widthCol = 0;
-        heightCol = 0;
+        heightRow = 0;
         pageSize = row * col;
         page = (int) Math.ceil(datas.size() * 1.0 / pageSize);
     }
@@ -77,37 +109,36 @@ public class OptionMenuBar {
             Log.w(TAG, "viewPager is null.");
             return;
         }
-        if (adapter == null) {
-            Log.w(TAG, "adapter is null.");
-            return;
-        }
+        init();
+        MenuPagerAdapter adapter = new MenuPagerAdapter(createView());
+        viewPager.setAdapter(adapter);
+    }
+
+    private List<View> createView() {
         List<View> views = new ArrayList<>();
         for (int i = 0; i < page; i++) {
             List<MenuItem> items = new ArrayList<>();
-
             int start = pageSize * i;
-            int end = start + pageSize;
-            end = Math.min(end, datas.size());
+            int end = Math.min(start + pageSize, datas.size());
             for (int j = start; j < end; j++) {
-                items.add(datas.get(i));
+                items.add(datas.get(j));
             }
-
             RecyclerView view = new RecyclerView(context);
             view.setLayoutManager(new GridLayoutManager(context, col));
-            view.setAdapter(adapter.setItemDataAdapter(context, items));
+            view.setAdapter(onBindItemData(context, items));
             views.add(view);
             getPageMaxWH(view);
         }
-
-        MenuPagerAdapter adapter = new MenuPagerAdapter(views);
-        viewPager.setAdapter(adapter);
+        return views;
     }
+
+    protected abstract RecyclerView.Adapter onBindItemData(Context context, List<MenuItem> items);
 
     private void getPageMaxWH(View view) {
         int w = getViewWidth(view) / col;
         int h = getViewHeight(view) / row;
         widthCol = Math.max(widthCol, w);
-        heightCol = Math.max(heightCol, h);
+        heightRow = Math.max(heightRow, h);
     }
 
     private int getViewHeight(View view) {
@@ -161,9 +192,5 @@ public class OptionMenuBar {
         public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
             container.removeView(views.get(position));
         }
-    }
-
-    public interface OptionMenuBarAdapter{
-        RecyclerView.Adapter setItemDataAdapter(Context context, List<? extends MenuItem> items);
     }
 }

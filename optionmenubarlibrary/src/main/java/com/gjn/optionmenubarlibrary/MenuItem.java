@@ -9,6 +9,18 @@ public class MenuItem {
     private String name;
     private Object img;
 
+    public MenuItem() {
+    }
+
+    public MenuItem(String name) {
+        this.name = name;
+    }
+
+    public MenuItem(String name, Object img) {
+        this.name = name;
+        this.img = img;
+    }
+
     public String getName() {
         return name;
     }
