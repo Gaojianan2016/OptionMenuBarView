@@ -7,7 +7,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import java.util.List;
@@ -56,6 +55,11 @@ public class MenuBarView extends FrameLayout {
         return this;
     }
 
+    public void invalidateHeight(){
+        viewPager.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, optionMenuBar.getViewPagerHeight()));
+        addView(viewPager);
+    }
+
     public void updataView(OnAdapterListener onAdapterListener){
         updataView(datas, onAdapterListener);
     }
@@ -90,17 +94,14 @@ public class MenuBarView extends FrameLayout {
             return;
         }
         removeAllViews();
-        if (optionMenuBar == null) {
-            optionMenuBar = new OptionMenuBar(getContext(), viewPager, datas, row, col) {
-                @Override
-                protected RecyclerView.Adapter onBindItemData(Context context, List<MenuItem> items) {
-                    return onAdapterListener.onBindItemData(context, items);
-                }
-            };
-        }
+        optionMenuBar = new OptionMenuBar(getContext(), viewPager, datas, row, col) {
+            @Override
+            protected RecyclerView.Adapter onBindItemData(Context context, List<MenuItem> items) {
+                return onAdapterListener.onBindItemData(context, items);
+            }
+        };
         optionMenuBar.updataView();
-        viewPager.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, optionMenuBar.getViewPagerHeight()));
-        addView(viewPager);
+        invalidateHeight();
     }
 
     public interface OnAdapterListener{
