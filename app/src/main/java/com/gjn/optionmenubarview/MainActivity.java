@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private MenuBarView menuBarView;
     private ViewPager viewPager;
 
-    private boolean b;
+    private boolean b = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < 15; i++) {
             list.add(new MenuItem(i + "++++" + i));
         }
+        list.add(new MenuItem("我是新的" + list.size()));
 
         optionMenuBar = new OptionMenuBar(this, viewPager, list) {
             @Override
