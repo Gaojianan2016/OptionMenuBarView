@@ -1,7 +1,6 @@
 package com.gjn.optionmenubarlibrary;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -35,7 +34,7 @@ public abstract class OptionMenuBar {
     public OptionMenuBar(Context context, ViewPager viewPager, List<MenuItem> datas) {
         this.context = context;
         this.viewPager = viewPager;
-        this.datas = datas == null ? new ArrayList<MenuItem>(): datas;
+        this.datas = datas == null ? new ArrayList<MenuItem>() : datas;
     }
 
     public OptionMenuBar(Context context, ViewPager viewPager, List<MenuItem> datas, int row, int col) {
@@ -58,8 +57,8 @@ public abstract class OptionMenuBar {
         this.col = col;
     }
 
-    public void setDatas(List<MenuItem> datas){
-        this.datas = datas == null ? new ArrayList<MenuItem>(): datas;
+    public void setDatas(List<MenuItem> datas) {
+        this.datas = datas == null ? new ArrayList<MenuItem>() : datas;
     }
 
     public int getWidthCol() {
@@ -70,7 +69,7 @@ public abstract class OptionMenuBar {
         return heightRow;
     }
 
-    public int getViewPagerHeight(){
+    public int getViewPagerHeight() {
         return heightRow * 2;
     }
 
@@ -79,15 +78,15 @@ public abstract class OptionMenuBar {
         updataView();
     }
 
-    public void updataView(){
+    public void updataView() {
         updataView(datas);
     }
 
-    public void updataView(List<MenuItem> datas){
+    public void updataView(List<MenuItem> datas) {
         updataView(row, col, datas);
     }
 
-    public void updataView(int row, int col, List<MenuItem> datas){
+    public void updataView(int row, int col, List<MenuItem> datas) {
         setCol(col);
         setRow(row);
         setDatas(datas);
@@ -101,7 +100,7 @@ public abstract class OptionMenuBar {
         page = (int) Math.ceil(datas.size() * 1.0 / pageSize);
     }
 
-    private void create(){
+    private void create() {
         if (datas.size() == 0) {
             Log.w(TAG, "datas is null.");
             return;
@@ -136,35 +135,17 @@ public abstract class OptionMenuBar {
     protected abstract RecyclerView.Adapter onBindItemData(Context context, List<MenuItem> items);
 
     private void getPageMaxWH(View view) {
-        int w = getViewWidth(view) / col;
-        int h = getViewHeight(view) / row;
+        int w = viewUtils.getViewWidth(view) / col;
+        int h = viewUtils.getViewHeight(view) / row;
         widthCol = Math.max(widthCol, w);
         heightRow = Math.max(heightRow, h);
     }
 
-    private int getViewHeight(View view) {
-        int h = view.getHeight();
-        if (h == 0) {
-            view.measure(0,0);
-            h = view.getMeasuredHeight();
-        }
-        return h;
-    }
-
-    private int getViewWidth(View view) {
-        int w = view.getWidth();
-        if (w == 0) {
-            view.measure(0,0);
-            w = view.getMeasuredWidth();
-        }
-        return w;
-    }
-
-    private class MenuPagerAdapter extends PagerAdapter{
+    private class MenuPagerAdapter extends PagerAdapter {
         private List<View> views;
 
         public MenuPagerAdapter(List<View> views) {
-            this.views = views == null ? new ArrayList<View>(): views;
+            this.views = views == null ? new ArrayList<View>() : views;
         }
 
         @Override

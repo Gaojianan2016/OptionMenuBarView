@@ -1,14 +1,19 @@
 package com.gjn.optionmenubarview;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.gjn.baserecycleradapterlibrary.BaseRecyclerAdapter;
 import com.gjn.baserecycleradapterlibrary.RecyclerViewHolder;
+import com.gjn.optionmenubarlibrary.MenuBar;
 import com.gjn.optionmenubarlibrary.MenuBarView;
 import com.gjn.optionmenubarlibrary.MenuItem;
 import com.gjn.optionmenubarlibrary.OptionMenuBar;
@@ -24,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
 
     private boolean b = true;
+    private MenuBar menuBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,10 +52,9 @@ public class MainActivity extends AppCompatActivity {
 
         list = new ArrayList<>();
 
-        for (int i = 0; i < 15; i++) {
+        for (int i = 0; i < 3; i++) {
             list.add(new MenuItem(i + "++++" + i));
         }
-        list.add(new MenuItem("我是新的" + list.size()));
 
         optionMenuBar = new OptionMenuBar(this, viewPager, list) {
             @Override
@@ -57,10 +62,20 @@ public class MainActivity extends AppCompatActivity {
                 return listener.onBindItemData(context, items);
             }
         };
-        optionMenuBar.updataView();
+//        optionMenuBar.updataView();
 
         menuBarView = findViewById(R.id.mbv);
-        menuBarView.updataView(list, listener);
+//        menuBarView.updataView(list, listener);
+
+        LinearLayout fl = findViewById(R.id.ll_main);
+        menuBar = new MenuBar(this, R.layout.item, fl, list) {
+            @Override
+            public void onBindItem(Context context, View view, MenuItem menuItem, int row, int col) {
+                TextView textView = view.findViewById(R.id.tv_item);
+                textView.setText(menuItem.getName());
+            }
+        };
+        menuBar.updataView(3, 4 ,5);
 
         onclick();
     }
@@ -70,8 +85,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 list.add(new MenuItem("我是新的" + list.size()));
-                optionMenuBar.updataView(list);
-                menuBarView.updataView(list);
+                menuBar.updataView(list);
+//                optionMenuBar.updataView(list);
+//                menuBarView.updataView(list);
             }
         });
         findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
@@ -80,19 +96,21 @@ public class MainActivity extends AppCompatActivity {
                 if (list.size() != 1) {
                     list.remove(list.size() - 1);
                 }
-                optionMenuBar.updataView(list);
-                menuBarView.updataView(list);
+                menuBar.updataView(list);
+//                optionMenuBar.updataView(list);
+//                menuBarView.updataView(list);
             }
         });
         findViewById(R.id.button3).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 list.clear();
-                for (int i = 0; i < 15; i++) {
+                for (int i = 0; i < 3; i++) {
                     list.add(new MenuItem(i + "++++" + i));
                 }
-                optionMenuBar.updataView(list);
-                menuBarView.updataView(list);
+                menuBar.updataView(list);
+//                optionMenuBar.updataView(list);
+//                menuBarView.updataView(list);
             }
         });
         findViewById(R.id.button4).setOnClickListener(new View.OnClickListener() {
