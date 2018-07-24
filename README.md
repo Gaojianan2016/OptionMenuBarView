@@ -32,7 +32,7 @@ import com.gjn.baserecycleradapterlibrary.BaseRecyclerAdapter;
 import com.gjn.baserecycleradapterlibrary.RecyclerViewHolder;
 import com.gjn.optionmenubarlibrary.MenuBarView;
 import com.gjn.optionmenubarlibrary.MenuItem;
-import com.gjn.optionmenubarlibrary.OptionMenuBar;
+import com.gjn.optionmenubarlibrary.SingleMenuBar;
 
 import java.util.ArrayList;
 import java.util.List;

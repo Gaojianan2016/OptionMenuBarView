@@ -18,8 +18,8 @@ import java.util.List;
  * @time 2018/7/19 15:59
  */
 
-public abstract class OptionMenuBar {
-    private static final String TAG = "OptionMenuBar";
+public abstract class SingleMenuBar {
+    private static final String TAG = "SingleMenuBar";
 
     private Context context;
     private ViewPager viewPager;
@@ -31,13 +31,13 @@ public abstract class OptionMenuBar {
     private int widthCol;
     private int heightRow;
 
-    public OptionMenuBar(Context context, ViewPager viewPager, List<MenuItem> datas) {
+    public SingleMenuBar(Context context, ViewPager viewPager, List<MenuItem> datas) {
         this.context = context;
         this.viewPager = viewPager;
         this.datas = datas == null ? new ArrayList<MenuItem>() : datas;
     }
 
-    public OptionMenuBar(Context context, ViewPager viewPager, List<MenuItem> datas, int row, int col) {
+    public SingleMenuBar(Context context, ViewPager viewPager, List<MenuItem> datas, int row, int col) {
         this(context, viewPager, datas);
         this.row = row;
         this.col = col;

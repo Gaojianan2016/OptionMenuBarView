@@ -7,7 +7,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import java.util.List;
 
@@ -16,97 +16,101 @@ import java.util.List;
  * @time 2018/7/20 17:05
  */
 
-public class MenuBarView extends FrameLayout {
-    private static final String TAG = "MenuBarView";
+public class SingleMenuBarView extends LinearLayout {
+    private static final String TAG = "SingleMenuBarView";
 
     private ViewPager viewPager;
-    private OptionMenuBar optionMenuBar;
+    private SingleMenuBar menuBar;
     private List<MenuItem> datas;
     private int row = 2;
     private int col = 4;
     private OnAdapterListener onAdapterListener;
 
-    public MenuBarView(@NonNull Context context) {
+    public SingleMenuBarView(@NonNull Context context) {
         this(context, null);
     }
 
-    public MenuBarView(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public SingleMenuBarView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         viewPager = new ViewPager(context);
     }
 
-    public MenuBarView setDatas(List<MenuItem> datas) {
+    public SingleMenuBarView setDatas(List<MenuItem> datas) {
         this.datas = datas;
         return this;
     }
 
-    public MenuBarView setRow(int row) {
+    public SingleMenuBarView setRow(int row) {
         this.row = row;
         return this;
     }
 
-    public MenuBarView setCol(int col) {
+    public SingleMenuBarView setCol(int col) {
         this.col = col;
         return this;
     }
 
-    public MenuBarView setOnAdapterListener(OnAdapterListener onAdapterListener) {
+    public SingleMenuBarView setOnAdapterListener(OnAdapterListener onAdapterListener) {
         this.onAdapterListener = onAdapterListener;
         return this;
     }
 
-    public void invalidateHeight(){
+    public void invalidateHeight() {
         removeAllViews();
-        viewPager.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, optionMenuBar.getViewPagerHeight()));
+        viewPager.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, menuBar.getViewPagerHeight()));
         addView(viewPager);
     }
 
-    public void updataView(OnAdapterListener onAdapterListener){
-        updataView(datas, onAdapterListener);
-    }
-
-    public void updataView(int row, int col){
+    public void updataView(int row, int col) {
         setRow(row);
         setCol(col);
-        updataView(datas, onAdapterListener);
-    }
-
-    public void updataView(List<MenuItem> datas){
-        updataView(datas, onAdapterListener);
-    }
-
-    public void updataView(List<MenuItem> datas, OnAdapterListener onAdapterListener){
-        setDatas(datas);
-        setOnAdapterListener(onAdapterListener);
         updataView();
     }
 
-    public void updataView(){
-        if (optionMenuBar != null) {
-            Log.d(TAG, "optionMenuBar updata.");
-            optionMenuBar.updataView(row, col, datas);
-        }else {
-            Log.d(TAG, "optionMenuBar create.");
+    public void updataView(List<MenuItem> datas) {
+        setDatas(datas);
+        updataView();
+    }
+
+    public void updataView(OnAdapterListener onAdapterListener) {
+        updataView(datas, onAdapterListener);
+    }
+
+    public void updataView(List<MenuItem> datas, OnAdapterListener onAdapterListener) {
+        setDatas(datas);
+        setOnAdapterListener(onAdapterListener);
+        Log.d(TAG, "menuBar create.");
+        create();
+        invalidateHeight();
+    }
+
+    public void updataView() {
+        if (menuBar != null) {
+            Log.d(TAG, "menuBar updata.");
+            menuBar.updataView(row, col, datas);
+        } else {
+            Log.d(TAG, "menuBar create.");
             create();
         }
         invalidateHeight();
     }
 
-    private void create(){
+    private void create() {
         if (onAdapterListener == null) {
             Log.w(TAG, "onAdapterListener is null");
             return;
         }
-        optionMenuBar = new OptionMenuBar(getContext(), viewPager, datas, row, col) {
+        setOrientation(VERTICAL);
+        menuBar = new SingleMenuBar(getContext(), viewPager, datas, row, col) {
             @Override
             protected RecyclerView.Adapter onBindItemData(Context context, List<MenuItem> items) {
                 return onAdapterListener.onBindItemData(context, items);
             }
         };
-        optionMenuBar.updataView();
+        menuBar.updataView();
     }
 
-    public interface OnAdapterListener{
+    public interface OnAdapterListener {
         RecyclerView.Adapter onBindItemData(Context context, List<MenuItem> items);
     }
 }
