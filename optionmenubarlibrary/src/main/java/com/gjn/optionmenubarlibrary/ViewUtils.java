@@ -8,7 +8,7 @@ import android.view.ViewGroup;
  * @time 2018/7/23 16:54
  */
 
-public class viewUtils {
+public class ViewUtils {
     public static int getViewHeight(View view) {
         int h = view.getHeight();
         if (h == 0) {

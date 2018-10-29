@@ -30,7 +30,7 @@ public class VariableMenuBarView extends LinearLayout {
         super(context, attrs);
     }
 
-    public LinearLayout getLines(int num){
+    public LinearLayout getLines(int num) {
         if (menuBar != null) {
             return menuBar.getLines(num);
         }
@@ -59,7 +59,7 @@ public class VariableMenuBarView extends LinearLayout {
         updataView();
     }
 
-    public void updataView(OnItemDateListener onItemDateListener){
+    public void updataView(OnItemDateListener onItemDateListener) {
         updataView(datas, onItemDateListener);
     }
 
@@ -92,7 +92,7 @@ public class VariableMenuBarView extends LinearLayout {
         setOrientation(VERTICAL);
         menuBar = new VariableMenuBar(getContext(), onItemDateListener.getViewId(), this, datas, rows) {
             @Override
-            public void onBindItem(Context context, View view, MenuItem menuItem, int row, int col) {
+            public void onBindItem(Context context, View view, final MenuItem menuItem, final int row, final int col) {
                 onItemDateListener.onBindItem(context, view, menuItem, row, col);
             }
         };
@@ -101,6 +101,7 @@ public class VariableMenuBarView extends LinearLayout {
 
     public interface OnItemDateListener {
         void onBindItem(Context context, View view, MenuItem menuItem, int row, int col);
+
         int getViewId();
     }
 }

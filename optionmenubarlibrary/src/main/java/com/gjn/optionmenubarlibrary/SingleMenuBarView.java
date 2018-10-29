@@ -21,7 +21,7 @@ public class SingleMenuBarView extends LinearLayout {
 
     private ViewPager viewPager;
     private SingleMenuBar menuBar;
-    private List<MenuItem> datas;
+    private List<IMenuItem> datas;
     private int row = 2;
     private int col = 4;
     private OnAdapterListener onAdapterListener;
@@ -35,7 +35,7 @@ public class SingleMenuBarView extends LinearLayout {
         viewPager = new ViewPager(context);
     }
 
-    public SingleMenuBarView setDatas(List<MenuItem> datas) {
+    public SingleMenuBarView setDatas(List<IMenuItem> datas) {
         this.datas = datas;
         return this;
     }
@@ -67,7 +67,7 @@ public class SingleMenuBarView extends LinearLayout {
         updataView();
     }
 
-    public void updataView(List<MenuItem> datas) {
+    public void updataView(List<IMenuItem> datas) {
         setDatas(datas);
         updataView();
     }
@@ -76,7 +76,7 @@ public class SingleMenuBarView extends LinearLayout {
         updataView(datas, onAdapterListener);
     }
 
-    public void updataView(List<MenuItem> datas, OnAdapterListener onAdapterListener) {
+    public void updataView(List<IMenuItem> datas, OnAdapterListener onAdapterListener) {
         setDatas(datas);
         setOnAdapterListener(onAdapterListener);
         Log.d(TAG, "menuBar create.");
@@ -103,7 +103,7 @@ public class SingleMenuBarView extends LinearLayout {
         setOrientation(VERTICAL);
         menuBar = new SingleMenuBar(getContext(), viewPager, datas, row, col) {
             @Override
-            protected RecyclerView.Adapter onBindItemData(Context context, List<MenuItem> items) {
+            protected RecyclerView.Adapter onBindItemData(Context context, List<IMenuItem> items) {
                 return onAdapterListener.onBindItemData(context, items);
             }
         };
@@ -111,6 +111,6 @@ public class SingleMenuBarView extends LinearLayout {
     }
 
     public interface OnAdapterListener {
-        RecyclerView.Adapter onBindItemData(Context context, List<MenuItem> items);
+        RecyclerView.Adapter onBindItemData(Context context, List<IMenuItem> items);
     }
 }

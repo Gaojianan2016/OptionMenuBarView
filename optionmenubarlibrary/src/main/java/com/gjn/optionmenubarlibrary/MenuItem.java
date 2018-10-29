@@ -5,7 +5,7 @@ package com.gjn.optionmenubarlibrary;
  * @time 2018/7/19 16:10
  */
 
-public class MenuItem {
+public class MenuItem implements IMenuItem{
     private String name;
     private Object img;
 
@@ -21,18 +21,22 @@ public class MenuItem {
         this.img = img;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }
 
+    @Override
     public Object getImg() {
         return img;
     }
 
+    @Override
     public void setImg(Object img) {
         this.img = img;
     }

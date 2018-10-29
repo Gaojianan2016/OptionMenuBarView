@@ -23,7 +23,7 @@ public abstract class SingleMenuBar {
 
     private Context context;
     private ViewPager viewPager;
-    private List<MenuItem> datas;
+    private List<IMenuItem> datas;
     private int row = 2;
     private int col = 4;
     private int pageSize;
@@ -31,16 +31,16 @@ public abstract class SingleMenuBar {
     private int widthCol;
     private int heightRow;
 
-    public SingleMenuBar(Context context, ViewPager viewPager, List<MenuItem> datas) {
+    public SingleMenuBar(Context context, ViewPager viewPager, List<IMenuItem> datas) {
         this.context = context;
         this.viewPager = viewPager;
-        this.datas = datas == null ? new ArrayList<MenuItem>() : datas;
+        setDatas(datas);
     }
 
-    public SingleMenuBar(Context context, ViewPager viewPager, List<MenuItem> datas, int row, int col) {
+    public SingleMenuBar(Context context, ViewPager viewPager, List<IMenuItem> datas, int row, int col) {
         this(context, viewPager, datas);
-        this.row = row;
-        this.col = col;
+        setCol(col);
+        setRow(row);
     }
 
     public void setRow(int row) {
@@ -57,8 +57,8 @@ public abstract class SingleMenuBar {
         this.col = col;
     }
 
-    public void setDatas(List<MenuItem> datas) {
-        this.datas = datas == null ? new ArrayList<MenuItem>() : datas;
+    public void setDatas(List<IMenuItem> datas) {
+        this.datas = datas == null ? new ArrayList<IMenuItem>() : datas;
     }
 
     public int getWidthCol() {
@@ -82,11 +82,11 @@ public abstract class SingleMenuBar {
         updataView(datas);
     }
 
-    public void updataView(List<MenuItem> datas) {
+    public void updataView(List<IMenuItem> datas) {
         updataView(row, col, datas);
     }
 
-    public void updataView(int row, int col, List<MenuItem> datas) {
+    public void updataView(int row, int col, List<IMenuItem> datas) {
         setCol(col);
         setRow(row);
         setDatas(datas);
@@ -117,7 +117,7 @@ public abstract class SingleMenuBar {
     private List<View> createView() {
         List<View> views = new ArrayList<>();
         for (int i = 0; i < page; i++) {
-            List<MenuItem> items = new ArrayList<>();
+            List<IMenuItem> items = new ArrayList<>();
             int start = pageSize * i;
             int end = Math.min(start + pageSize, datas.size());
             for (int j = start; j < end; j++) {
@@ -132,11 +132,11 @@ public abstract class SingleMenuBar {
         return views;
     }
 
-    protected abstract RecyclerView.Adapter onBindItemData(Context context, List<MenuItem> items);
+    protected abstract RecyclerView.Adapter onBindItemData(Context context, List<IMenuItem> items);
 
     private void getPageMaxWH(View view) {
-        int w = viewUtils.getViewWidth(view) / col;
-        int h = viewUtils.getViewHeight(view) / row;
+        int w = ViewUtils.getViewWidth(view) / col;
+        int h = ViewUtils.getViewHeight(view) / row;
         widthCol = Math.max(widthCol, w);
         heightRow = Math.max(heightRow, h);
     }
@@ -162,10 +162,7 @@ public abstract class SingleMenuBar {
         @Override
         public Object instantiateItem(@NonNull ViewGroup container, int position) {
             View view = views.get(position);
-            ViewGroup parent = (ViewGroup) view.getParent();
-            if (parent != null) {
-                parent.removeView(view);
-            }
+            ViewUtils.checkParent(view);
             container.addView(view);
             return view;
         }
