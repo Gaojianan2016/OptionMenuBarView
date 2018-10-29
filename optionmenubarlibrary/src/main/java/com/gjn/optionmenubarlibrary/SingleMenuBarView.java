@@ -25,6 +25,7 @@ public class SingleMenuBarView extends LinearLayout {
     private int row = 2;
     private int col = 4;
     private OnAdapterListener onAdapterListener;
+    private int supplementheight;
 
     public SingleMenuBarView(@NonNull Context context) {
         this(context, null);
@@ -33,6 +34,7 @@ public class SingleMenuBarView extends LinearLayout {
     public SingleMenuBarView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         viewPager = new ViewPager(context);
+        setSupplementheight(0);
     }
 
     public SingleMenuBarView setDatas(List<IMenuItem> datas) {
@@ -50,6 +52,11 @@ public class SingleMenuBarView extends LinearLayout {
         return this;
     }
 
+    public SingleMenuBarView setSupplementheight(int h_dp) {
+        this.supplementheight = (int) (h_dp * getContext().getResources().getDisplayMetrics().density + 0.5f);
+        return this;
+    }
+
     public SingleMenuBarView setOnAdapterListener(OnAdapterListener onAdapterListener) {
         this.onAdapterListener = onAdapterListener;
         return this;
@@ -57,7 +64,7 @@ public class SingleMenuBarView extends LinearLayout {
 
     public void invalidateHeight() {
         removeAllViews();
-        viewPager.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, menuBar.getViewPagerHeight()));
+        viewPager.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, menuBar.getViewPagerHeight() + supplementheight));
         addView(viewPager);
     }
 

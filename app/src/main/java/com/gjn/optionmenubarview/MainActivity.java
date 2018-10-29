@@ -26,19 +26,17 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
 
     private boolean b = true;
-    private SingleMenuBarView.OnAdapterListener listener3;
+    private SingleMenuBarView.OnAdapterListener listener;
+    private SingleMenuBarView.OnAdapterListener listener2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        viewPager = findViewById(R.id.vp);
-
-        final SingleMenuBarView.OnAdapterListener listener = new SingleMenuBarView.OnAdapterListener() {
+        listener = new SingleMenuBarView.OnAdapterListener() {
             @Override
             public RecyclerView.Adapter onBindItemData(final Context context, List<IMenuItem> items) {
-
                 BaseRecyclerAdapter<IMenuItem> adapter = new BaseRecyclerAdapter<IMenuItem>(MainActivity.this, R.layout.item, items) {
                     @Override
                     public void bindData(RecyclerViewHolder holder, IMenuItem menuItem, int i) {
@@ -55,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        listener3 = new SingleMenuBarView.OnAdapterListener() {
+        listener2 = new SingleMenuBarView.OnAdapterListener() {
             @Override
             public RecyclerView.Adapter onBindItemData(final Context context, List<IMenuItem> items) {
 
@@ -76,11 +74,11 @@ public class MainActivity extends AppCompatActivity {
         };
 
         list = new ArrayList<>();
-
         for (int i = 0; i < 8; i++) {
             list.add(new MenuItem(i + "++++" + i));
         }
 
+        viewPager = findViewById(R.id.vp);
         optionMenuBar = new SingleMenuBar(this, viewPager, list) {
             @Override
             protected RecyclerView.Adapter onBindItemData(Context context, List<IMenuItem> items) {
@@ -90,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         optionMenuBar.updataView();
 
         menuBarView = findViewById(R.id.mbv);
-        menuBarView.updataView(list, listener);
+        menuBarView.setSupplementheight(40).updataView(list, listener2);
 
         onclick();
     }
@@ -112,32 +110,6 @@ public class MainActivity extends AppCompatActivity {
                 }
                 optionMenuBar.updataView(list);
                 menuBarView.updataView(list);
-            }
-        });
-        findViewById(R.id.button3).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                list.clear();
-                for (int i = 0; i < 8; i++) {
-                    list.add(new MenuItem(i + "++++" + i));
-                }
-                optionMenuBar.updataView(list);
-                menuBarView.updataView(list);
-            }
-        });
-        findViewById(R.id.button4).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (b) {
-                    b = false;
-                    viewPager.setVisibility(View.VISIBLE);
-                    menuBarView.setVisibility(View.GONE);
-                } else {
-                    b = true;
-                    viewPager.setVisibility(View.GONE);
-                    menuBarView.setVisibility(View.VISIBLE);
-                    menuBarView.updataView(listener3);
-                }
             }
         });
     }
