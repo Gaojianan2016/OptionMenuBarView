@@ -2,7 +2,6 @@ apply plugin: 'com.android.library'
 //添加生成依赖
 apply plugin: 'com.github.dcendents.android-maven'
 group='com.github.Gaojianan2016'
-
 android {
     compileSdkVersion 27
     defaultConfig {
