@@ -52,8 +52,8 @@ public class SingleMenuBarView extends LinearLayout {
         return this;
     }
 
-    public SingleMenuBarView setSupplementHeight(int h_dp) {
-        this.supplementHeight = (int) (h_dp * getContext().getResources().getDisplayMetrics().density + 0.5f);
+    public SingleMenuBarView setSupplementHeight(int height_dp) {
+        this.supplementHeight = (int) (height_dp * getContext().getResources().getDisplayMetrics().density + 0.5f);
         return this;
     }
 
