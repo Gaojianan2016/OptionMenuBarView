@@ -62,7 +62,7 @@ public class SingleMenuBarView extends LinearLayout {
         return this;
     }
 
-    public SingleMenuBarView addOnPageChangeListener(ViewPager.OnPageChangeListener listener){
+    public SingleMenuBarView addOnPageChangeListener(OnPageChangeListener listener){
         viewPager.addOnPageChangeListener(listener);
         return this;
     }

@@ -13,7 +13,7 @@ allprojects {
 
 
 dependencies {
-    implementation 'com.github.Gaojianan2016:OptionMenuBarView:1.0.5'
+    implementation 'com.github.Gaojianan2016:OptionMenuBarView:1.0.6'
 }
 ```
 
