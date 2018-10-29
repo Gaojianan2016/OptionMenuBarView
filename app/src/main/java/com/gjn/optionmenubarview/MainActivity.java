@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -88,7 +89,14 @@ public class MainActivity extends AppCompatActivity {
         optionMenuBar.updataView();
 
         menuBarView = findViewById(R.id.mbv);
-        menuBarView.setSupplementheight(40).updataView(list, listener2);
+        menuBarView.setSupplementHeight(40)
+                .addOnPageChangeListener(new SingleMenuBarView.OnPageChangeListener() {
+                    @Override
+                    public void onPageSelected(int position) {
+                        Log.e("-s-", "翻页 = " + position);
+                    }
+                })
+                .updataView(list, listener2);
 
         onclick();
     }

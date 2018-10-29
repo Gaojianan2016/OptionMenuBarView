@@ -25,7 +25,7 @@ public class SingleMenuBarView extends LinearLayout {
     private int row = 2;
     private int col = 4;
     private OnAdapterListener onAdapterListener;
-    private int supplementheight;
+    private int supplementHeight;
 
     public SingleMenuBarView(@NonNull Context context) {
         this(context, null);
@@ -34,7 +34,7 @@ public class SingleMenuBarView extends LinearLayout {
     public SingleMenuBarView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         viewPager = new ViewPager(context);
-        setSupplementheight(0);
+        setSupplementHeight(0);
     }
 
     public SingleMenuBarView setDatas(List<IMenuItem> datas) {
@@ -52,8 +52,8 @@ public class SingleMenuBarView extends LinearLayout {
         return this;
     }
 
-    public SingleMenuBarView setSupplementheight(int h_dp) {
-        this.supplementheight = (int) (h_dp * getContext().getResources().getDisplayMetrics().density + 0.5f);
+    public SingleMenuBarView setSupplementHeight(int h_dp) {
+        this.supplementHeight = (int) (h_dp * getContext().getResources().getDisplayMetrics().density + 0.5f);
         return this;
     }
 
@@ -62,9 +62,18 @@ public class SingleMenuBarView extends LinearLayout {
         return this;
     }
 
+    public SingleMenuBarView addOnPageChangeListener(ViewPager.OnPageChangeListener listener){
+        viewPager.addOnPageChangeListener(listener);
+        return this;
+    }
+
+    public ViewPager getViewPager(){
+        return viewPager;
+    }
+
     public void invalidateHeight() {
         removeAllViews();
-        viewPager.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, menuBar.getViewPagerHeight() + supplementheight));
+        viewPager.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, menuBar.getViewPagerHeight() + supplementHeight));
         addView(viewPager);
     }
 
@@ -119,5 +128,14 @@ public class SingleMenuBarView extends LinearLayout {
 
     public interface OnAdapterListener {
         RecyclerView.Adapter onBindItemData(Context context, List<IMenuItem> items);
+    }
+
+    public abstract static class OnPageChangeListener implements ViewPager.OnPageChangeListener {
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+
+
+        @Override
+        public void onPageScrollStateChanged(int state) {}
     }
 }

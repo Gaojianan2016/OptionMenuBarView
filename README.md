@@ -13,7 +13,7 @@ allprojects {
 
 
 dependencies {
-    implementation 'com.github.Gaojianan2016:OptionMenuBarView:1.0.4'
+    implementation 'com.github.Gaojianan2016:OptionMenuBarView:1.0.5'
 }
 ```
 
@@ -109,7 +109,14 @@ public class MainActivity extends AppCompatActivity {
         optionMenuBar.updataView();
 
         menuBarView = findViewById(R.id.mbv);
-        menuBarView.setSupplementheight(40).updataView(list, listener2);
+        menuBarView.setSupplementHeight(40)
+                        .addOnPageChangeListener(new SingleMenuBarView.OnPageChangeListener() {
+                            @Override
+                            public void onPageSelected(int position) {
+                                Log.e("-s-", "翻页 = " + position);
+                            }
+                        })
+                        .updataView(list, listener2);
 
         onclick();
     }
