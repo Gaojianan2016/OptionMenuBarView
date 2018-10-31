@@ -26,6 +26,7 @@ public class SingleMenuBarView extends LinearLayout {
     private int col = 4;
     private OnAdapterListener onAdapterListener;
     private int supplementHeight;
+    private ViewPager.OnPageChangeListener onPageChangeListener;
 
     public SingleMenuBarView(@NonNull Context context) {
         this(context, null);
@@ -62,13 +63,33 @@ public class SingleMenuBarView extends LinearLayout {
         return this;
     }
 
-    public SingleMenuBarView addOnPageChangeListener(OnPageChangeListener listener){
-        viewPager.addOnPageChangeListener(listener);
+    public SingleMenuBarView setMenuBar(SingleMenuBar menuBar){
+        this.menuBar = menuBar;
+        return this;
+    }
+
+    public SingleMenuBarView addOnPageChangeListener(ViewPager.OnPageChangeListener listener){
+        onPageChangeListener = listener;
+        if (menuBar != null) {
+            menuBar.addOnPageChangeListener(listener);
+        }
         return this;
     }
 
     public ViewPager getViewPager(){
         return viewPager;
+    }
+
+    public SingleMenuBar getMenuBar(){
+        return menuBar;
+    }
+
+    public int getCurPage(){
+        return menuBar.getCurPage();
+    }
+
+    public int getPage(){
+        return menuBar.getPage();
     }
 
     public void invalidateHeight() {
@@ -123,6 +144,7 @@ public class SingleMenuBarView extends LinearLayout {
                 return onAdapterListener.onBindItemData(context, items);
             }
         };
+        menuBar.addOnPageChangeListener(onPageChangeListener);
         menuBar.updataView();
     }
 
@@ -130,10 +152,9 @@ public class SingleMenuBarView extends LinearLayout {
         RecyclerView.Adapter onBindItemData(Context context, List<IMenuItem> items);
     }
 
-    public abstract static class OnPageChangeListener implements ViewPager.OnPageChangeListener {
+    public static abstract class OnPageChangeListener implements ViewPager.OnPageChangeListener{
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
-
 
         @Override
         public void onPageScrollStateChanged(int state) {}

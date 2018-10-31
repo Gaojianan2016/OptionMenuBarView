@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     private SingleMenuBarView.OnAdapterListener listener;
     private SingleMenuBarView.OnAdapterListener listener2;
 
+    BaseRecyclerAdapter<IMenuItem> mAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
                 adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int i) {
-                        Toast.makeText(context, "sss" + i, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "page" + i, Toast.LENGTH_SHORT).show();
                     }
                 });
                 return adapter;
@@ -57,33 +59,41 @@ public class MainActivity extends AppCompatActivity {
         listener2 = new SingleMenuBarView.OnAdapterListener() {
             @Override
             public RecyclerView.Adapter onBindItemData(final Context context, List<IMenuItem> items) {
-
-                BaseRecyclerAdapter<IMenuItem> adapter = new BaseRecyclerAdapter<IMenuItem>(MainActivity.this, R.layout.item, items) {
+                mAdapter = new BaseRecyclerAdapter<IMenuItem>(MainActivity.this, R.layout.item, items) {
                     @Override
                     public void bindData(RecyclerViewHolder holder, IMenuItem menuItem, int i) {
-                        holder.setTextViewText(R.id.tv_item, menuItem.getName() + "1111");
+                        holder.setTextViewText(R.id.tv_item, menuItem.getName() + " 111111");
                     }
                 };
-                adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+                mAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int i) {
-                        Toast.makeText(context, "sss2  " + i, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "view  " + i, Toast.LENGTH_SHORT).show();
                     }
                 });
-                return adapter;
+                return mAdapter;
             }
         };
 
         list = new ArrayList<>();
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 12; i++) {
             list.add(new MenuItem(i + "++++" + i));
         }
 
+        List<IMenuItem> list1 = new ArrayList<>();
+        for (IMenuItem iMenuItem : list) {
+            list1.add(new MenuItem(iMenuItem.getName()));
+        }
+        List<IMenuItem> list2 = new ArrayList<>();
+        for (IMenuItem iMenuItem : list) {
+            list2.add(new MenuItem(iMenuItem.getName()));
+        }
+
         viewPager = findViewById(R.id.vp);
-        optionMenuBar = new SingleMenuBar(this, viewPager, list) {
+        optionMenuBar = new SingleMenuBar(this, viewPager, list1) {
             @Override
             protected RecyclerView.Adapter onBindItemData(Context context, List<IMenuItem> items) {
-                return listener.onBindItemData(context, items);
+                return listener2.onBindItemData(context, items);
             }
         };
         optionMenuBar.updataView();
@@ -96,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
                         Log.e("-s-", "翻页 = " + position);
                     }
                 })
-                .updataView(list, listener2);
+                .updataView(list2, listener2);
 
         onclick();
     }
@@ -105,19 +115,37 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                list.add(new MenuItem("我是新的" + list.size()));
-                optionMenuBar.updataView(list);
-                menuBarView.updataView(list);
+                optionMenuBar.getDatas().add(new MenuItem("我是新的" + optionMenuBar.getDatas().size()));
+                menuBarView.getMenuBar().getDatas().add(new MenuItem("我是新的" + menuBarView.getMenuBar().getDatas().size() + " 111111"));
+                optionMenuBar.updataView();
+                menuBarView.updataView();
             }
         });
         findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (list.size() != 1) {
-                    list.remove(list.size() - 1);
+                if (optionMenuBar.getDatas().size() != 1) {
+                    optionMenuBar.getDatas().remove(optionMenuBar.getDatas().size() - 1);
                 }
-                optionMenuBar.updataView(list);
-                menuBarView.updataView(list);
+                if (menuBarView.getMenuBar().getDatas().size() != 1) {
+                    menuBarView.getMenuBar().getDatas().remove(menuBarView.getMenuBar().getDatas().size() - 1);
+                }
+                optionMenuBar.updataView();
+                menuBarView.updataView();
+            }
+        });
+        findViewById(R.id.button3).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                menuBarView.updataView(2, 4);
+                optionMenuBar.updataView(2, 4);
+            }
+        });
+        findViewById(R.id.button4).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                menuBarView.updataView(1, 5);
+                optionMenuBar.updataView(1, 5);
             }
         });
     }
